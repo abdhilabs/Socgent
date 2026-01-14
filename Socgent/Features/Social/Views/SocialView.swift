@@ -18,16 +18,17 @@ struct SocialView: View {
       NavigationStack {
         VStack(alignment: .leading, spacing: 16) {
           VStack(alignment: .leading, spacing: 8) {
-            Text("What's your social?")
+            Text("social.prompt.title".localized)
               .font(.body)
               .bold()
               .foregroundStyle(style.colors.text.primary)
             
-            TextField("x.com/elonmusk/status... | 62895784934...", text: viewStore.binding(
+            TextField("social.placeholder.input".localized, text: viewStore.binding(
               get: { $0.txtSocial },
               send: { return .onTextChanged(text: $0) }))
             .textFieldStyle(.roundedBorder)
             .font(.caption)
+            .preferredColorScheme(viewStore.isDarkStyle ? .dark : .light)
             
             if let errorMessage = viewStore.errorMessage {
               Text(errorMessage)
@@ -54,7 +55,7 @@ struct SocialView: View {
           
           VStack(alignment: .leading, spacing: 0) {
             if viewStore.recentSocials.isNotEmpty {
-              Text("Recent socials")
+              Text("social.recent.title".localized)
                 .foregroundColor(style.colors.text.secondary)
                 .font(.subheadline)
             }
