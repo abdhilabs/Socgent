@@ -1,0 +1,4 @@
+// Base Release configuration for Socgent
+SWIFT_VERSION = 6.2
+
+X_BEARER_TOKEN = $(X_BEARER_TOKEN)

@@ -14,10 +14,16 @@ packages:
 settings:
   base:
     SWIFT_VERSION: 6.2
+configFiles:
+  Debug: Configs/Release.xcconfig
+  Release: Configs/Release.xcconfig
 targets:
   Socgent:
     type: application
     platform: iOS
+    configFiles:
+      Debug: Configs/Release.xcconfig
+      Release: Configs/Release.xcconfig
     deploymentTarget: "17.0"
     sources:
       - path: Socgent        
@@ -35,6 +41,8 @@ targets:
         ITSAppUsesNonExemptEncryption: false
         UILaunchScreen:
           UILaunchScreen: {}
+        ConfigVariables:
+          X_BEARER_TOKEN: "$(X_BEARER_TOKEN)"
     dependencies:
       - package: ComposableArchitecture
       - package: Moya 
@@ -68,6 +76,9 @@ targets:
   SocgentTests:
     type: bundle.unit-test
     platform: iOS
+    configFiles:
+      Debug: Configs/Release.xcconfig
+      Release: Configs/Release.xcconfig
     deploymentTarget: "16.0"
     sources:
       - path: SocgentTests
