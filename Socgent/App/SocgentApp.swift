@@ -37,6 +37,7 @@ struct SocgentApp: App {
       StyleProvider {
         SocialView(store: store)
       }
+      .pulseConsoleOnShake()
     }
   }
 }
