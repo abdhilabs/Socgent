@@ -10,7 +10,7 @@ import SwiftData
 import ComposableArchitecture
 
 struct XClient: Sendable {
-  var detailTweet: @Sendable (_ id: String) async throws -> TweetDetail
+  var getTweetDetail: @Sendable (_ id: String) async -> Result<TweetDetail, SocgentError>
 }
 
 extension DependencyValues {
@@ -22,8 +22,8 @@ extension DependencyValues {
 
 private enum XClientKey: DependencyKey {
   static let liveValue: XClient = .init(
-    detailTweet: { id in
-      return try await NetworkService.shared
+    getTweetDetail: { id in
+      return await NetworkService.shared
         .request(.xAPI(api: .getTweetDetail(id: id)), as: TweetDetail.self)
     }
   )

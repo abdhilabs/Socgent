@@ -12,8 +12,8 @@ struct TweetDetail: Codable {
   var includes: Includes?
   
   enum CodingKeys: String, CodingKey {
-    case data = "data"
-    case includes = "includes"
+    case data
+    case includes
   }
 }
 
@@ -25,9 +25,9 @@ extension TweetDetail {
     var authorId: String?
     
     enum CodingKeys: String, CodingKey {
-      case id = "id"
+      case id
       case createdAt = "created_at"
-      case text = "text"
+      case text
       case authorId = "author_id"
     }
   }
@@ -36,7 +36,7 @@ extension TweetDetail {
     var users: [Users]?
     
     enum CodingKeys: String, CodingKey {
-      case users = "users"
+      case users
     }
   }
   
@@ -46,9 +46,9 @@ extension TweetDetail {
     var id: String?
     
     enum CodingKeys: String, CodingKey {
-      case username = "username"
-      case name = "name"
-      case id = "id"
+      case username
+      case name
+      case id
     }
   }
 }

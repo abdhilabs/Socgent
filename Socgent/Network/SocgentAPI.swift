@@ -14,7 +14,10 @@ enum SocgentAPI {
 
 extension SocgentAPI: TargetType {
   var baseURL: URL {
-    URL(string: "")!
+    switch self {
+    case .xAPI:
+      return URL(string: "https://api.twitter.com")!
+    }
   }
   
   var path: String {
@@ -38,10 +41,12 @@ extension SocgentAPI: TargetType {
     }
   }
   
-  var headers: [String : String]? {
+  var headers: [String: String]? {
     switch self {
-    case .xAPI(let api):
-      return api.headers
+    case .xAPI:
+      return [
+        "Authorization": "Bearer \(EnvConfig.value(for: .token))"
+      ]
     }
   }
 }

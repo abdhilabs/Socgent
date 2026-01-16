@@ -12,6 +12,7 @@ import UIKit
 @Reducer
 struct SocialReducer {
   @Dependency(\.recentSocialDB) var recentSocialDB
+  @Dependency(\.xClient) var xClient
   @Dependency(\.stylePreference) var stylePreference
   
   @ObservableState
