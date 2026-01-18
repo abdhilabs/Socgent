@@ -19,4 +19,8 @@ extension UIApplication {
       failedCompletion?()
     }
   }
+  
+  func endEditing(_ force: Bool) {
+    UIWindow.current?.endEditing(force)
+  }
 }

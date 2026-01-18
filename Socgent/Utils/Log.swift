@@ -8,8 +8,8 @@
 import Foundation
 import Pulse
 
-public enum Log {
-  public static func info(_ items: Any..., separator: String = "", terminator: String = "\n") {
+enum Log {
+  static func info(_ items: Any..., separator: String = "", terminator: String = "\n") {
 #if DEBUG
     let prefix = "🔵 [Socgent LOG] >> "
     let message = items.map { item -> String in
@@ -30,7 +30,7 @@ public enum Log {
 #endif
   }
   
-  public static func error(_ items: Any..., separator: String = "", terminator: String = "\n") {
+  static func error(_ items: Any..., separator: String = "", terminator: String = "\n") {
 #if DEBUG
     let prefix = "🔴 [Socgent LOG] >> "
     let message = items.map { item -> String in

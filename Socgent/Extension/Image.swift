@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension Image {
+extension Image {
   func imageColor(_ color: Color?) -> some View {
     self
       .renderingMode(.template)

@@ -52,3 +52,14 @@ extension TweetDetail {
     }
   }
 }
+
+extension TweetDetail {
+  func toTweetCard() -> TweetCardItem {
+    let user = includes?.users?.first(where: { $0.id == data?.authorId })
+    return TweetCardItem(
+      username: "@" + (user?.username ?? ""),
+      name: user?.name ?? "",
+      text: data?.text ?? ""
+    )
+  }
+}

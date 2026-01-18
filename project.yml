@@ -42,6 +42,7 @@ targets:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         ITSAppUsesNonExemptEncryption: false
+        NSPhotoLibraryAddUsageDescription: "This app requires access to your photo library to save images."
         UILaunchScreen:
           UILaunchScreen: {}
         ConfigVariables:

@@ -62,7 +62,7 @@ struct SocialView: View {
             
             List {
               ForEach(viewStore.recentSocials) { social in
-                Socialtem(item: social)
+                SocialItem(item: social)
                   .listRowInsets(EdgeInsets())
                   .listRowBackground(Color.clear)
                   .onTapGesture {
@@ -91,9 +91,20 @@ struct SocialView: View {
           }
         }
       }
+      .onTapGesture {
+        UIApplication.shared.endEditing(true)
+      }
       .onAppear {
         viewStore.send(.onAppear)
       }
+      .sheet(isPresented: viewStore.binding(
+        get: { $0.isTweetDetailPresented },
+        send: { return .onTweetDetailPresented(isPresented: $0) })) {
+          NavigationView {
+            let store = Store(initialState: TweetDetailReducer.State(), reducer: { TweetDetailReducer() })
+            TweetDetailView(store: store)
+          }
+        }
     }
   }
 }

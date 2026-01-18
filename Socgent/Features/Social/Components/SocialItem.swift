@@ -1,5 +1,5 @@
 //
-//  Socialtem.swift
+//  SocialItem.swift
 //  Socgent
 //
 //  Created by Abdhilabs on 10/01/26.
@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct Socialtem: View {
+struct SocialItem: View {
   @Environment(\.appStyle) var style
   
   let item: Social
@@ -39,5 +39,5 @@ struct Socialtem: View {
 }
 
 #Preview {
-  Socialtem(item: Social(social: "Social", type: .whatsapp, updatedAt: .now))
+  SocialItem(item: Social(social: "Social", type: .whatsapp, updatedAt: .now))
 }

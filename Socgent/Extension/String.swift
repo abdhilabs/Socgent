@@ -12,7 +12,7 @@ extension String {
     allSatisfy { char in char.isNumber }
   }
   
-  public var localized: String {
+  var localized: String {
     return NSLocalizedString(self, tableName: nil, bundle: .main, value: "", comment: "")
   }
 }

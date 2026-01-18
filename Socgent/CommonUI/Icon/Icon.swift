@@ -31,7 +31,7 @@ struct Icon: View {
       .frame(width: size.rawValue, height: size.rawValue)
   }
   
-  public enum Size: CGFloat {
+  enum Size: CGFloat {
     case size16 = 16
     case size24 = 24
   }

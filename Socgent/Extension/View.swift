@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension View {
+extension View {
   @ViewBuilder
   func `if`<Content: View>(_ condition: @autoclosure () -> Bool, transformTrue: (Self) -> Content, transformFalse: ((Self) -> Content)? = nil) -> some View {
     if condition() {
@@ -49,6 +49,24 @@ public extension View {
       }
     } else {
       self
+    }
+  }
+  
+  func convertToImage(width: CGFloat? = nil) -> UIImage {
+    let controller = UIHostingController(rootView: self.ignoresSafeArea())
+    let view = controller.view as UIView
+    
+    let height = view.intrinsicContentSize.height
+    let width = width ?? view.intrinsicContentSize.width
+    let size: CGSize = CGSize(width: width, height: height)
+    
+    view.bounds = CGRect(origin: .zero, size: size)
+    view.backgroundColor = UIColor.clear
+    
+    let renderer = UIGraphicsImageRenderer(size: size)
+    
+    return renderer.image { _ in
+      view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
     }
   }
 }

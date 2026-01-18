@@ -17,10 +17,11 @@ struct SocialReducer {
   
   @ObservableState
   struct State: Equatable {
-    var txtSocial: String = ""
+    var isDarkStyle = false
+    var isTweetDetailPresented = false
+    var txtSocial = ""
     var errorMessage: String?
     var recentSocials: [Social] = []
-    var isDarkStyle: Bool = false
   }
   
   enum Action: Equatable {
@@ -31,6 +32,7 @@ struct SocialReducer {
     case onItemSocialTapped(item: Social)
     case onItemSocialDeleted(id: IndexSet)
     case onToolbarThemeTapped
+    case onTweetDetailPresented(isPresented: Bool)
     case fetchCurrentTheme
     case clearError
   }
@@ -54,17 +56,16 @@ struct SocialReducer {
       case .onChipTapped(let type):
         switch type {
         case .shareX:
-          // implement Share X behaviour later
-          return .none
+          return .send(.onTweetDetailPresented(isPresented: true))
         case .whatsapp:
           return openToWhatsapp(state: &state)
         }
       case .onItemSocialTapped(let item):
-        return .run { _ in
-          switch item.type {
-          case .shareX:
-            break
-          case .whatsapp:
+        switch item.type {
+        case .shareX:
+          return .send(.onTweetDetailPresented(isPresented: true))
+        case .whatsapp:
+          return .run { _ in
             await MainActor.run {
               UIApplication.shared.openURLInBrowser(urlString: item.social)
             }
@@ -96,6 +97,9 @@ struct SocialReducer {
         case .failure:
           state.recentSocials.removeAll()
         }
+        return .none
+      case .onTweetDetailPresented(let isPresented):
+        state.isTweetDetailPresented = isPresented
         return .none
       case .fetchCurrentTheme:
         let style = stylePreference.load()
