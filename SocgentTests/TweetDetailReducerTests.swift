@@ -16,6 +16,55 @@ struct TweetDetailReducerTests {
     border: RGBA(red: 0.8, green: 0.8, blue: 0.8, opacity: 1)
   )
 
+  @Test func measuringStateIsRetriedOnAppear() async {
+    var initial = TweetDetailReducer.State()
+    initial.excerpt = QuoteFixture.fixture(for: .normal).sourceText
+    initial.renderGeneration = 1
+    initial.block = .measuring
+    let store = TestStore(initialState: initial) {
+      TweetDetailReducer()
+    }
+    await store.send(.onAppear)
+    await store.receive(.fitResolved(generation: 1, fit: .fits)) {
+      $0.block = .ready
+    }
+    #expect(store.state.canExport)
+  }
+
+  @Test func cancelledRenderDoesNotDeliver() async {
+    let pause = Pause()
+    let didDeliver = Delivered()
+    let store = store {
+      $0.quoteCardExport.render = { _, _ in
+        await pause.wait()
+        return .success(.testExport)
+      }
+      $0.quoteCardExport.deliver = { _, _ in
+        didDeliver.value = true
+        return .saved
+      }
+    }
+    await appear(store)
+    await store.send(.exportRequested(.save, palette: palette)) {
+      $0.isExporting = true
+      $0.result = nil
+    }
+    let shorter = "sample quote"
+    await store.send(.excerptSelected(shorter)) {
+      $0.excerpt = shorter
+      $0.renderGeneration = 2
+      $0.isExporting = false
+      $0.block = .measuring
+      $0.result = nil
+    }
+    pause.resume()
+    await store.receive(.fitResolved(generation: 2, fit: .fits)) {
+      $0.block = .ready
+    }
+    #expect(didDeliver.value == false)
+    #expect(store.state.result == nil)
+  }
+
   @Test func appearUsesTheNormalFixture() async {
     let store = store()
     await appear(store)
@@ -211,7 +260,7 @@ struct TweetDetailReducerTests {
     let bad = QuoteCardRenderedImage(pngData: Data([1]), pixelWidth: 10, pixelHeight: 10)
     await store.receive(.exportRendered(generation: 1, kind: .save, result: .success(bad))) {
       $0.isExporting = false
-      $0.result = .unexpectedDimensions
+      $0.result = .unexpectedDimensions(width: 10, height: 10)
     }
   }
 
@@ -258,6 +307,23 @@ struct TweetDetailReducerTests {
     TestStore(initialState: TweetDetailReducer.State()) {
       TweetDetailReducer()
     } withDependencies: update
+  }
+
+  private final class Pause: @unchecked Sendable {
+    private var continuation: CheckedContinuation<Void, Never>?
+
+    func wait() async {
+      await withCheckedContinuation { continuation = $0 }
+    }
+
+    func resume() {
+      continuation?.resume()
+      continuation = nil
+    }
+  }
+
+  private final class Delivered: @unchecked Sendable {
+    var value = false
   }
 
   private func appear(

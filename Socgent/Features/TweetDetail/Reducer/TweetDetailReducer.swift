@@ -52,8 +52,11 @@ struct TweetDetailReducer {
     Reduce { state, action in
       switch action {
       case .onAppear:
-        guard state.renderGeneration == 0 else { return .none }
-        return replaceExcerpt(state.fixture.sourceText, state: &state)
+        if state.renderGeneration == 0 {
+          return replaceExcerpt(state.fixture.sourceText, state: &state)
+        }
+        guard state.block == .measuring else { return .none }
+        return measure(state)
 
       case .fixtureSelected(let id):
         guard id != state.fixtureID else { return .none }
@@ -80,8 +83,10 @@ struct TweetDetailReducer {
         let content = state.content
         return .run { send in
           let rendered = await exporting.render(content, palette)
+          guard !Task.isCancelled else { return }
           await send(.exportRendered(generation: generation, kind: kind, result: rendered))
         }
+        .cancellable(id: QuoteCardEffectID.export, cancelInFlight: true)
 
       case .exportRejected(let failure):
         state.result = QuoteCardResult(failure)
@@ -97,13 +102,16 @@ struct TweetDetailReducer {
         case .success(let image):
           guard QuoteCardSpec.matchesExportPixels(width: image.pixelWidth, height: image.pixelHeight) else {
             state.isExporting = false
-            state.result = .unexpectedDimensions
+            state.result = .unexpectedDimensions(width: image.pixelWidth, height: image.pixelHeight)
             return .none
           }
           return .run { send in
+            guard !Task.isCancelled else { return }
             let resolution = await exporting.deliver(image, kind)
+            guard !Task.isCancelled else { return }
             await send(.exportResolved(generation: generation, resolution))
           }
+          .cancellable(id: QuoteCardEffectID.export, cancelInFlight: false)
         }
 
       case .exportResolved(let generation, let resolution):
@@ -128,11 +136,25 @@ struct TweetDetailReducer {
     state.isExporting = false
     state.result = nil
     state.block = .measuring
+    return .merge(
+      .cancel(id: QuoteCardEffectID.export),
+      measure(state)
+    )
+  }
+
+  private func measure(_ state: State) -> Effect<Action> {
     let generation = state.renderGeneration
     let content = state.content
     return .run { send in
       let fit = await measuring.fit(content)
+      guard !Task.isCancelled else { return }
       await send(.fitResolved(generation: generation, fit: fit))
     }
+    .cancellable(id: QuoteCardEffectID.measure, cancelInFlight: true)
   }
+}
+
+private enum QuoteCardEffectID: Hashable {
+  case export
+  case measure
 }

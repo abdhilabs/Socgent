@@ -127,6 +127,20 @@
         "id" : { "stringUnit" : { "state" : "translated", "value" : "RTL" } }
       }
     },
+    "quote.screen.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sample quote" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Kutipan contoh" } }
+      }
+    },
+    "quote.source.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Source text" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Teks sumber" } }
+      }
+    },
     "quote.result.saved" : {
       "extractionState" : "manual",
       "localizations" : {

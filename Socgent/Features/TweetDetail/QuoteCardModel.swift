@@ -184,7 +184,7 @@ enum QuoteCardExportResolution: Equatable, Sendable {
 enum QuoteCardResult: Equatable, Sendable {
   case saved
   case renderFailed
-  case unexpectedDimensions
+  case unexpectedDimensions(width: Int, height: Int)
   case encodeFailed
   case photosDenied
   case photosFailed
@@ -194,7 +194,8 @@ enum QuoteCardResult: Equatable, Sendable {
   init(_ failure: QuoteCardExportFailure) {
     switch failure {
     case .renderFailed: self = .renderFailed
-    case .unexpectedDimensions: self = .unexpectedDimensions
+    case .unexpectedDimensions(let width, let height):
+      self = .unexpectedDimensions(width: width, height: height)
     case .encodeFailed: self = .encodeFailed
     case .photosDenied: self = .photosDenied
     case .photosFailed: self = .photosFailed
@@ -239,7 +240,9 @@ struct RGBA: Equatable, Sendable {
   var color: Color {
     Color(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
   }
+}
 
+extension RGBA {
   @MainActor
   init?(color: Color) {
     let resolved = UIColor(color).resolvedColor(with: UITraitCollection.current)
@@ -267,7 +270,9 @@ struct QuoteCardPalette: Equatable, Sendable {
   var textPrimary: RGBA
   var textSecondary: RGBA
   var border: RGBA
+}
 
+extension QuoteCardPalette {
   @MainActor
   init?(style: AppStyle) {
     guard

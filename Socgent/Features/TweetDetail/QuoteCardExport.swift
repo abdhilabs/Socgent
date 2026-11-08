@@ -95,9 +95,12 @@ private final class ResumeOnce: @unchecked Sendable {
 
   func run(_ body: () -> Void) {
     lock.lock()
-    defer { lock.unlock() }
-    guard !done else { return }
+    if done {
+      lock.unlock()
+      return
+    }
     done = true
+    lock.unlock()
     body()
   }
 }

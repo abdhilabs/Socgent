@@ -25,6 +25,12 @@ struct QuoteCardMeasurerTests {
     #expect(QuoteCardMeasurer.evaluate(content) == .emptyExcerpt)
   }
 
+  @Test func unbreakableLineDoesNotFit() {
+    var content = QuoteFixture.fixture(for: .normal).content
+    content.excerpt = String(repeating: "W", count: 80)
+    #expect(QuoteCardMeasurer.evaluate(content) == .excerptOverflow)
+  }
+
   @Test func hugeLinkDoesNotFit() {
     var content = QuoteFixture.fixture(for: .normal).content
     content.excerpt = "Hi"

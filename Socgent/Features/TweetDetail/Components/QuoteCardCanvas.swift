@@ -72,6 +72,7 @@ struct QuoteCardPreview: View {
         }
       }
       .clipped()
+      .contentShape(Rectangle())
       .accessibilityElement(children: .contain)
   }
 

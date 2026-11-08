@@ -46,7 +46,7 @@ struct TweetDetailView: View {
               .fixedSize(horizontal: false, vertical: true)
           }
 
-          Text("Tweet")
+          Text("quote.source.label".localized)
             .foregroundColor(style.colors.text.secondary)
             .font(.subheadline)
 
@@ -61,7 +61,7 @@ struct TweetDetailView: View {
         .padding(.horizontal, 16)
       }
       .background(style.colors.background.primary)
-      .navigationTitle("Tweet Detail")
+      .navigationTitle("quote.screen.title".localized)
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
@@ -100,6 +100,9 @@ struct TweetDetailView: View {
       return (key.localized, true)
     }
     guard let result = state.result else { return nil }
+    if case .unexpectedDimensions(let width, let height) = result {
+      return ("\(result.localizationKey.localized) (\(width)×\(height))", true)
+    }
     return (result.localizationKey.localized, result.isError)
   }
 }
