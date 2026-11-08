@@ -15,48 +15,51 @@ struct TweetDetailView: View {
 
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
-      VStack(alignment: .leading, spacing: 12) {
-        Text("quote.fixture.banner".localized)
-          .font(.caption)
-          .foregroundStyle(style.colors.text.secondary)
+      ScrollView {
+        VStack(alignment: .leading, spacing: 12) {
+          Text("quote.fixture.banner".localized)
+            .font(.caption)
+            .foregroundStyle(style.colors.text.secondary)
 
-        Picker("quote.fixture.picker".localized, selection: viewStore.binding(
-          get: \.fixtureID,
-          send: { .fixtureSelected($0) }
-        )) {
-          ForEach(QuoteFixtureID.allCases) { id in
-            Text(id.titleKey.localized).tag(id)
+          Picker("quote.fixture.picker".localized, selection: viewStore.binding(
+            get: \.fixtureID,
+            send: { .fixtureSelected($0) }
+          )) {
+            ForEach(QuoteFixtureID.allCases) { id in
+              Text(id.titleKey.localized).tag(id)
+            }
           }
+          .pickerStyle(.menu)
+
+          if let palette = QuoteCardPalette(style: style) {
+            QuoteCardPreview(content: viewStore.content, block: viewStore.block, palette: palette)
+          } else {
+            Text("quote.error.palette".localized)
+              .font(.caption)
+              .foregroundStyle(style.colors.content.danger)
+          }
+
+          if let notice = notice(for: viewStore.state) {
+            Text(notice.text)
+              .font(.caption)
+              .foregroundStyle(notice.isError ? style.colors.content.danger : style.colors.text.secondary)
+              .fixedSize(horizontal: false, vertical: true)
+          }
+
+          Text("Tweet")
+            .foregroundColor(style.colors.text.secondary)
+            .font(.subheadline)
+
+          SelectableTextView(
+            text: viewStore.fixture.sourceText,
+            textColor: UIColor(style.colors.text.primary),
+            customActionTitle: "Highlight Tweet",
+            onCustomAction: { viewStore.send(.excerptSelected($0)) }
+          )
+          .frame(minHeight: 160)
         }
-        .pickerStyle(.menu)
-
-        if let palette = QuoteCardPalette(style: style) {
-          QuoteCardPreview(content: viewStore.content, block: viewStore.block, palette: palette)
-        } else {
-          Text("quote.error.palette".localized)
-            .font(.caption)
-            .foregroundStyle(style.colors.content.danger)
-        }
-
-        if let notice = notice(for: viewStore.state) {
-          Text(notice.text)
-            .font(.caption)
-            .foregroundStyle(notice.isError ? style.colors.content.danger : style.colors.text.secondary)
-            .fixedSize(horizontal: false, vertical: true)
-        }
-
-        Text("Tweet")
-          .foregroundColor(style.colors.text.secondary)
-          .font(.subheadline)
-
-        SelectableTextView(
-          text: viewStore.fixture.sourceText,
-          textColor: UIColor(style.colors.text.primary),
-          customActionTitle: "Highlight Tweet",
-          onCustomAction: { viewStore.send(.excerptSelected($0)) }
-        )
+        .padding(.horizontal, 16)
       }
-      .padding(.horizontal, 16)
       .background(style.colors.background.primary)
       .navigationTitle("Tweet Detail")
       .navigationBarTitleDisplayMode(.inline)
