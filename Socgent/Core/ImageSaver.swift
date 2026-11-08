@@ -2,43 +2,36 @@
 //  ImageSaver.swift
 //  Socgent
 //
-//  Created by Abdhilabs on 17/01/26.
-//
 
-import UIKit
+import Foundation
 import Photos
 
+enum PhotoLibrarySaveResult: Equatable, Sendable {
+  case saved
+  case denied
+  case failed
+}
+
 actor ImageSaver: NSObject {
-  static func saveImage(for image: UIImage) async -> Bool {
+  nonisolated static func savePNG(_ data: Data) async -> PhotoLibrarySaveResult {
     let status = await requestAddAuthorizationIfNeeded()
-    guard status == .authorized || status == .limited else {
-      Log.error("Photo Library add permission not granted (\(status.rawValue))")
-      return false
-    }
-    
-    guard let pngData = image.pngData() else {
-      Log.error("Failed to convert image to PNG data")
-      return false
-    }
-    
+    guard status == .authorized || status == .limited else { return .denied }
+
     do {
       try await PHPhotoLibrary.shared().performChanges {
         let request = PHAssetCreationRequest.forAsset()
-        request.addResource(with: .photo, data: pngData, options: nil)
+        request.addResource(with: .photo, data: data, options: nil)
       }
-      return true
+      return .saved
     } catch {
-      Log.error("Error while saving image! (\(error.localizedDescription))")
-      return false
+      return .failed
     }
   }
-  
-  private static func requestAddAuthorizationIfNeeded() async -> PHAuthorizationStatus {
+
+  nonisolated private static func requestAddAuthorizationIfNeeded() async -> PHAuthorizationStatus {
     let status = PHPhotoLibrary.authorizationStatus(for: .addOnly)
-    if status != .notDetermined {
-      return status
-    }
-    
+    if status != .notDetermined { return status }
+
     return await withCheckedContinuation { continuation in
       PHPhotoLibrary.requestAuthorization(for: .addOnly) { newStatus in
         continuation.resume(returning: newStatus)

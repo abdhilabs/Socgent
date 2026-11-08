@@ -5,6 +5,7 @@ struct SelectableTextView: UIViewRepresentable {
   @State var selectedText: String = ""
   
   var text: String
+  var textColor: UIColor = .label
   var customActionTitle: String
   var onCustomAction: (String) -> Void
   
@@ -23,6 +24,7 @@ struct SelectableTextView: UIViewRepresentable {
     if uiView.text != text {
       uiView.text = text
     }
+    uiView.textColor = textColor
     uiView.isEditable = false
     uiView.isSelectable = true
   }

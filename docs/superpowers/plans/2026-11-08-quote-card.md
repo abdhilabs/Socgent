@@ -70,31 +70,31 @@ enum QuoteCardMeasurer {
 
 **Files:** model, measurer, logic tests, measurer tests.
 
-- [ ] Write tests for 1800 by 1200, 3:2, exact emoji and Arabic excerpts, rejected selections, and measurer fit for the four fixtures plus a huge URL.
-- [ ] Implement spec, fixtures, selection, direction, and measurer.
+- [x] Write tests for 1800 by 1200, 3:2, exact emoji and Arabic excerpts, rejected selections, and measurer fit for the four fixtures plus a huge URL.
+- [x] Implement spec, fixtures, selection, direction, and measurer.
 - [ ] Command, when Xcode exists: `xcodebuild test -scheme Socgent -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SocgentTests`
-- [ ] This Linux workspace: do not run that command. Record NOT RUN.
+- [x] This Linux workspace: do not run that command. Record NOT RUN.
 
 ### Task 2: Reducer export gate
 
 **Files:** `TweetDetailReducer.swift`, `TweetDetailReducerTests.swift`, export client stubs.
 
-- [ ] Test appear, long-fixture overflow, disabled export, duplicate taps, photos denial, share cancel, share failure, wrong pixel size, and stale generation.
-- [ ] Implement the reducer against `quoteCardMeasuring` and `quoteCardExport` dependencies.
-- [ ] Do not call `xClient`.
+- [x] Test appear, long-fixture overflow, disabled export, duplicate taps, photos denial, share cancel, share failure, wrong pixel size, and stale generation.
+- [x] Implement the reducer against `quoteCardMeasuring` and `quoteCardExport` dependencies.
+- [x] Do not call `xClient`.
 
 ### Task 3: Canvas, render, share, save
 
 **Files:** canvas, renderer, sharer, `ImageSaver`, detail view, social sheet, strings, selectable text color.
 
-- [ ] `ImageRenderer` proposed size 600 by 400 and scale 3. Reject other pixel sizes before deliver.
-- [ ] Share sheet popover uses the presenting view's center.
-- [ ] Preview scales `QuoteCardCanvas`. Overflow shows the placeholder, not a clipped card.
-- [ ] Keep the detail store in `@State` so a parent refresh does not drop the excerpt.
+- [x] `ImageRenderer` proposed size 600 by 400 and scale 3. Reject other pixel sizes before deliver.
+- [x] Share sheet popover uses the presenting view's center.
+- [x] Preview scales `QuoteCardCanvas`. Overflow shows the placeholder, not a clipped card.
+- [x] Keep the detail store in `@State` so a parent refresh does not drop the excerpt.
 
 ### Task 4: Manual check on a Mac
 
-Not run here.
+- [ ] Not run in this Linux workspace.
 
 1. `xcodegen generate`
 2. Run the Socgent scheme on an iPhone simulator and an iPad simulator.

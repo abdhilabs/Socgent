@@ -2,69 +2,77 @@
 //  TweetDetailView.swift
 //  Socgent
 //
-//  Created by Abdhilabs on 17/01/26.
-//
 
 import ComposableArchitecture
 import SwiftUI
+import UIKit
 
 struct TweetDetailView: View {
-  @Environment(\.presentationMode) private var presentationMode
-  @Environment(\.appStyle) var style
-  
+  @Environment(\.dismiss) private var dismiss
+  @Environment(\.appStyle) private var style
+
   let store: StoreOf<TweetDetailReducer>
-  
+
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
-      VStack {
-        PagingHorizontal(
-          items: TweetCardMode.allCases,
-          currentIndex: viewStore.binding(
-            get: { $0.selectedIndexMode },
-            send: { return .onModeSelected(index: $0) }),
-          content: { mode in
-            switch mode {
-            case .textOnly:
-              TweetCard(item: viewStore.tweetDetail)
-            case .full:
-              TweetCard(item: viewStore.tweetDetail)
-            }
+      VStack(alignment: .leading, spacing: 12) {
+        Text("quote.fixture.banner".localized)
+          .font(.caption)
+          .foregroundStyle(style.colors.text.secondary)
+
+        Picker("quote.fixture.picker".localized, selection: viewStore.binding(
+          get: \.fixtureID,
+          send: { .fixtureSelected($0) }
+        )) {
+          ForEach(QuoteFixtureID.allCases) { id in
+            Text(id.titleKey.localized).tag(id)
           }
-        )
-        
-        VStack(alignment: .leading, spacing: 0) {
-          Text("Tweet")
-            .foregroundColor(style.colors.text.secondary)
-            .font(.subheadline)
-          
-          SelectableTextView(
-            text: viewStore.tweetDetail.text,
-            customActionTitle: "Highlight Tweet",
-            onCustomAction: { text in
-              viewStore.send(.onHighlightTweetSelected(text: text))
-            }
-          )
         }
-        .padding(.horizontal, 16)
+        .pickerStyle(.menu)
+
+        if let palette = QuoteCardPalette(style: style) {
+          QuoteCardPreview(content: viewStore.content, block: viewStore.block, palette: palette)
+        } else {
+          Text("quote.error.palette".localized)
+            .font(.caption)
+            .foregroundStyle(style.colors.content.danger)
+        }
+
+        if let notice = notice(for: viewStore.state) {
+          Text(notice.text)
+            .font(.caption)
+            .foregroundStyle(notice.isError ? style.colors.content.danger : style.colors.text.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+
+        Text("Tweet")
+          .foregroundColor(style.colors.text.secondary)
+          .font(.subheadline)
+
+        SelectableTextView(
+          text: viewStore.fixture.sourceText,
+          textColor: UIColor(style.colors.text.primary),
+          customActionTitle: "Highlight Tweet",
+          onCustomAction: { viewStore.send(.excerptSelected($0)) }
+        )
       }
+      .padding(.horizontal, 16)
       .background(style.colors.background.primary)
       .navigationTitle("Tweet Detail")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
-          if presentationMode.wrappedValue.isPresented {
-            Button("Close") {
-              presentationMode.wrappedValue.dismiss()
-            }
-          }
+          Button("Close") { dismiss() }
         }
-        
-        ToolbarItem(placement: .topBarTrailing) {
-          Button("Save") {
-            Task {
-              viewStore.send(.onSaveTapped)
-            }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+          Button("quote.action.share".localized) {
+            requestExport(.share, viewStore: viewStore)
           }
+          .disabled(!viewStore.canExport)
+          Button("quote.action.save".localized) {
+            requestExport(.save, viewStore: viewStore)
+          }
+          .disabled(!viewStore.canExport)
         }
       }
       .task {
@@ -72,11 +80,33 @@ struct TweetDetailView: View {
       }
     }
   }
+
+  private func requestExport(
+    _ kind: QuoteCardExportKind,
+    viewStore: ViewStore<TweetDetailReducer.State, TweetDetailReducer.Action>
+  ) {
+    guard let palette = QuoteCardPalette(style: style) else {
+      viewStore.send(.exportRejected(.paletteFailed))
+      return
+    }
+    viewStore.send(.exportRequested(kind, palette: palette))
+  }
+
+  private func notice(for state: TweetDetailReducer.State) -> (text: String, isError: Bool)? {
+    if let key = state.block.localizationKey {
+      return (key.localized, true)
+    }
+    guard let result = state.result else { return nil }
+    return (result.localizationKey.localized, result.isError)
+  }
 }
 
 #Preview {
-  TweetDetailView(store: Store(
-    initialState: TweetDetailReducer.State(),
-    reducer: { TweetDetailReducer() }
-  ))
+  StyleProvider {
+    NavigationStack {
+      TweetDetailView(store: Store(initialState: TweetDetailReducer.State()) {
+        TweetDetailReducer()
+      })
+    }
+  }
 }

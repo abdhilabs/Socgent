@@ -12,6 +12,9 @@ struct SocialView: View {
   @Environment(\.appStyle) var style
   
   let store: StoreOf<SocialReducer>
+  @State private var tweetDetailStore = Store(initialState: TweetDetailReducer.State()) {
+    TweetDetailReducer()
+  }
   
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
@@ -100,9 +103,8 @@ struct SocialView: View {
       .sheet(isPresented: viewStore.binding(
         get: { $0.isTweetDetailPresented },
         send: { return .onTweetDetailPresented(isPresented: $0) })) {
-          NavigationView {
-            let store = Store(initialState: TweetDetailReducer.State(), reducer: { TweetDetailReducer() })
-            TweetDetailView(store: store)
+          NavigationStack {
+            TweetDetailView(store: tweetDetailStore)
           }
         }
     }
