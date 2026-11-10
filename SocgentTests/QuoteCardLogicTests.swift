@@ -51,8 +51,11 @@ struct QuoteCardLogicTests {
     #expect(ExcerptSelection.accepted(arabic, in: rtlSource) == arabic)
 
     let combining = "cafe\u{0301}"
-    #expect(ExcerptSelection.accepted("café", in: combining) == nil)
-    #expect(ExcerptSelection.accepted("e\u{0301}", in: combining) == "e\u{0301}")
+    let acceptedCombining = ExcerptSelection.accepted("café", in: combining)
+    #expect(acceptedCombining?.unicodeScalars.elementsEqual(combining.unicodeScalars) == true)
+    #expect(acceptedCombining?.unicodeScalars.elementsEqual("café".unicodeScalars) == false)
+    let combiningPart = ExcerptSelection.accepted("e\u{0301}", in: combining)
+    #expect(combiningPart?.unicodeScalars.elementsEqual("e\u{0301}".unicodeScalars) == true)
     #expect(ExcerptSelection.accepted("", in: emojiSource) == nil)
     #expect(ExcerptSelection.accepted("not-in-source", in: emojiSource) == nil)
   }

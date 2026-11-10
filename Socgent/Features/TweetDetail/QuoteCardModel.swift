@@ -112,8 +112,8 @@ struct QuoteCardContent: Equatable, Sendable {
 
 enum ExcerptSelection {
   static func accepted(_ selection: String, in source: String) -> String? {
-    guard !selection.isEmpty, source.range(of: selection) != nil else { return nil }
-    return selection
+    guard !selection.isEmpty, let range = source.range(of: selection) else { return nil }
+    return String(source[range])
   }
 }
 
