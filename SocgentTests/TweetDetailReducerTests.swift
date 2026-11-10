@@ -4,6 +4,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 import Testing
 @testable import Socgent
 
@@ -260,7 +261,7 @@ struct TweetDetailReducerTests {
     let bad = QuoteCardRenderedImage(pngData: Data([1]), pixelWidth: 10, pixelHeight: 10)
     await store.receive(.exportRendered(generation: 1, kind: .save, result: .success(bad))) {
       $0.isExporting = false
-      $0.result = .unexpectedDimensions(width: 10, height: 10)
+      $0.result = QuoteCardResult.unexpectedDimensions(width: 10, height: 10)
     }
   }
 
