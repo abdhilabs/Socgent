@@ -189,13 +189,21 @@ struct TweetDetailReducerTests {
   }
 
   @Test func duplicateExportIsIgnored() async {
-    let store = store { $0.quoteCardExport.deliver = { _, _ in .saved } }
+    let pause = Pause()
+    let store = store {
+      $0.quoteCardExport.render = { _, _ in
+        await pause.wait()
+        return .success(.testExport)
+      }
+      $0.quoteCardExport.deliver = { _, _ in .saved }
+    }
     await appear(store)
     await store.send(.exportRequested(.save, palette: palette)) {
       $0.isExporting = true
       $0.result = nil
     }
     await store.send(.exportRequested(.share, palette: palette))
+    pause.resume()
     await store.receive(.exportRendered(generation: 1, kind: .save, result: .success(.testExport)))
     await store.receive(.exportResolved(generation: 1, .saved)) {
       $0.isExporting = false
@@ -279,7 +287,18 @@ struct TweetDetailReducerTests {
   }
 
   @Test func staleRenderIsDiscardedWhenTheExcerptChanges() async {
-    let store = store { $0.quoteCardExport.deliver = { _, _ in .saved } }
+    let pause = Pause()
+    let didDeliver = Delivered()
+    let store = store {
+      $0.quoteCardExport.render = { _, _ in
+        await pause.wait()
+        return .success(.testExport)
+      }
+      $0.quoteCardExport.deliver = { _, _ in
+        didDeliver.value = true
+        return .saved
+      }
+    }
     await appear(store)
     await store.send(.exportRequested(.save, palette: palette)) {
       $0.isExporting = true
@@ -293,10 +312,11 @@ struct TweetDetailReducerTests {
       $0.block = .measuring
       $0.result = nil
     }
-    await store.receive(.exportRendered(generation: 1, kind: .save, result: .success(.testExport)))
+    pause.resume()
     await store.receive(.fitResolved(generation: 2, fit: .fits)) {
       $0.block = .ready
     }
+    #expect(didDeliver.value == false)
     #expect(store.state.result == nil)
     #expect(store.state.excerpt == shorter)
     #expect(!store.state.isExporting)
