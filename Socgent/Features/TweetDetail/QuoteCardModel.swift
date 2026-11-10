@@ -164,7 +164,7 @@ enum QuoteCardExportKind: Equatable, Sendable {
   case save
 }
 
-enum QuoteCardExportFailure: Equatable, Sendable {
+enum QuoteCardExportFailure: Error, Equatable, Sendable {
   case renderFailed
   case unexpectedDimensions(width: Int, height: Int)
   case encodeFailed
