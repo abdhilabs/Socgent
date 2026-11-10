@@ -304,9 +304,11 @@ struct TweetDetailReducerTests {
   private func store(
     _ update: (inout DependencyValues) -> Void = { _ in }
   ) -> TestStore<TweetDetailReducer.State, TweetDetailReducer.Action> {
-    TestStore(initialState: TweetDetailReducer.State()) {
-      TweetDetailReducer()
-    } withDependencies: update
+    TestStore(
+      initialState: TweetDetailReducer.State(),
+      reducer: { TweetDetailReducer() },
+      withDependencies: update
+    )
   }
 
   private final class Pause: @unchecked Sendable {
