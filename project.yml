@@ -7,7 +7,7 @@ version:
 packages:
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture
-    version: 1.23.1
+    version: 1.23.3
   Moya:
     url: https://github.com/Moya/Moya
     version: 15.0.3
