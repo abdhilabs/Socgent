@@ -7,7 +7,7 @@ version:
 packages:
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture
-    version: 1.23.1
+    version: 1.23.3
   Moya:
     url: https://github.com/Moya/Moya
     version: 15.0.3
@@ -61,6 +61,12 @@ targets:
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_BUNDLE_IDENTIFIER: com.abdhilabs.socgent
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: true
+      configs:
+        Debug:
+          ENABLE_TESTABILITY: YES
+    scheme:
+      testTargets:
+        - SocgentTests
     postBuildScripts:
       # - name: Firebase Crashlytics
       #   script: |
@@ -85,9 +91,17 @@ targets:
     configFiles:
       Debug: Configs/Release.xcconfig
       Release: Configs/Release.xcconfig
-    deploymentTarget: "16.0"
+    deploymentTarget: "17.0"
     sources:
       - path: SocgentTests
     dependencies:
       - target: Socgent
       - package: ComposableArchitecture
+        link: false
+        embed: false
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.abdhilabs.socgent.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Socgent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Socgent"
+        BUNDLE_LOADER: "$(TEST_HOST)"

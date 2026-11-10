@@ -1,6 +1,153 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "quote.action.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Simpan" } }
+      }
+    },
+    "quote.action.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Bagikan" } }
+      }
+    },
+    "quote.block.attribution" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The name, handle, or link does not fit the card." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Nama, handle, atau tautan tidak muat di kartu." } }
+      }
+    },
+    "quote.block.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select an excerpt to continue." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Pilih kutipan untuk melanjutkan." } }
+      }
+    },
+    "quote.block.excerpt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This excerpt does not fit the card. Select a shorter excerpt." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Kutipan ini tidak muat di kartu. Pilih kutipan yang lebih pendek." } }
+      }
+    },
+    "quote.error.dimensions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rendered image was not 1800×1200 pixels." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Gambar yang dirender bukan 1800×1200 piksel." } }
+      }
+    },
+    "quote.error.encode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Could not encode the card image." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Gambar kartu tidak bisa dikodekan." } }
+      }
+    },
+    "quote.error.palette" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Could not read the current colors for export." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Warna untuk ekspor tidak bisa dibaca." } }
+      }
+    },
+    "quote.error.photosDenied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photos access was denied. The card was not saved." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Akses Foto ditolak. Kartu tidak disimpan." } }
+      }
+    },
+    "quote.error.photosFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Could not save the card to Photos." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Kartu tidak bisa disimpan ke Foto." } }
+      }
+    },
+    "quote.error.render" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Could not render the card." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Kartu tidak bisa dirender." } }
+      }
+    },
+    "quote.error.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Could not open the share sheet." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Lembar berbagi tidak bisa dibuka." } }
+      }
+    },
+    "quote.fixture.banner" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sample data — not a live tweet" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Data contoh — bukan tweet live" } }
+      }
+    },
+    "quote.fixture.emoji" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Emoji" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Emoji" } }
+      }
+    },
+    "quote.fixture.long" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Long" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Panjang" } }
+      }
+    },
+    "quote.fixture.normal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Normal" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Normal" } }
+      }
+    },
+    "quote.fixture.picker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sample" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Contoh" } }
+      }
+    },
+    "quote.fixture.rtl" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "RTL" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "RTL" } }
+      }
+    },
+    "quote.screen.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sample quote" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Kutipan contoh" } }
+      }
+    },
+    "quote.source.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Source text" } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Teks sumber" } }
+      }
+    },
+    "quote.result.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved to Photos." } },
+        "id" : { "stringUnit" : { "state" : "translated", "value" : "Tersimpan ke Foto." } }
+      }
+    },
     "by %@" : {
       "comment" : "A footer label at the bottom of the tweet card, displaying the username and name of the person who tweeted it.",
       "isCommentAutoGenerated" : true
